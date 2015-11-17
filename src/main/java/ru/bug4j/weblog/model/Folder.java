@@ -1,6 +1,8 @@
 package ru.bug4j.weblog.model;
 
+import org.aeonbits.owner.ConfigFactory;
 import org.springframework.stereotype.Component;
+import ru.bug4j.weblog.AppConfig;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -11,6 +13,8 @@ import java.util.List;
 @Component("folder")
 public class Folder {
 
+    static AppConfig appConfig = ConfigFactory.create(AppConfig.class);
+
     private File path;
 
     private List<String> contentFilesNames = new ArrayList<>();
@@ -19,13 +23,9 @@ public class Folder {
     }
 
     {
-        path = new File("/Alfresco/log");
+        path = new File(appConfig.getRootFolder());
         setContentFilesNames();
     }
-
-//    public Folder(String path) {
-//        this.path = new File(path);
-//    }
 
     public String getPath() {
         return path.getPath();
