@@ -25,7 +25,7 @@
                 <li><a href="download" class="disabled" role="button" title="Скачать весь файл">Download</a></li>
             </ul>
             <ul class="nav navbar-nav" style="float:right">
-                <li><a href="${pageContext.request.contextPath}" role="button" title="К списку логов">Selector</a></li>
+                <li><a href="${pageContext.request.contextPath}/" role="button" title="К списку логов">Selector</a></li>
             </ul>
         </div>
     </div>
