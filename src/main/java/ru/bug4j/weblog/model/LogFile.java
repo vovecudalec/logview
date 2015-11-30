@@ -1,15 +1,12 @@
 package ru.bug4j.weblog.model;
 
+import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.bug4j.weblog.WeblogException;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
 
 @Component("logFile")
 @Scope("prototype")
@@ -19,8 +16,6 @@ public class LogFile {
     private Folder folder;
 
     private String name;
-    List<String> content = new ArrayList<>();
-    private Integer hash;
 
     public LogFile() {
     }
@@ -38,53 +33,19 @@ public class LogFile {
     }
 
     public String getX(int length) throws WeblogException {
-        return tail2(new File(getFullName()), length);
+        return getLastNLogLines(new File(getFullName()), length);
     }
 
-    public String tail2( File file, int lines) {
-        java.io.RandomAccessFile fileHandler = null;
-        try {
-            fileHandler =
-                    new java.io.RandomAccessFile( file, "r" );
-            long fileLength = fileHandler.length() - 1;
-            StringBuilder sb = new StringBuilder();
-            int line = 0;
-
-            for(long filePointer = fileLength; filePointer != -1; filePointer--){
-                fileHandler.seek( filePointer );
-                int readByte = fileHandler.readByte();
-
-                if( readByte == 0xA ) {
-                    if (filePointer < fileLength) {
-                        line = line + 1;
-                    }
-                } else if( readByte == 0xD ) {
-                    if (filePointer < fileLength-1) {
-                        line = line + 1;
-                    }
-                }
-                if (line >= lines) {
-                    break;
-                }
-                sb.append( ( char ) readByte );
+    public String getLastNLogLines(File file, int nLines) {
+        StringBuilder bilder = new StringBuilder();
+        try (ReversedLinesFileReader fileReader = new ReversedLinesFileReader(file)) {
+            for (int line = 0; line < nLines; line++) {
+                bilder.insert(0, fileReader.readLine() + "\n");
             }
-
-            String lastLine = sb.reverse().toString();
-            return String.valueOf(Charset.forName("UTF-8").encode(lastLine));
-        } catch( java.io.FileNotFoundException e ) {
+        } catch (IOException e) {
             e.printStackTrace();
-            return null;
-        } catch( java.io.IOException e ) {
-            e.printStackTrace();
-            return null;
-        }
-        finally {
-            if (fileHandler != null )
-                try {
-                    fileHandler.close();
-                } catch (IOException e) {
-                }
+        } finally {
+            return bilder.toString();
         }
     }
-
 }
