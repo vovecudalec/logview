@@ -1,11 +1,12 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Maven + Spring MVC</title>
+    <title>Читалка логов</title>
     <spring:url value="/resources/core/css/hello.css" var="coreCss"/>
     <spring:url value="/resources/core/css/bootstrap.min.css" var="bootstrapCss"/>
     <link href="${bootstrapCss}" rel="stylesheet"/>
@@ -21,10 +22,10 @@
             <ul class="nav navbar-nav">
                 <li><a href="get100" role="button" title="100 последних строк">100</a></li>
                 <li><a href="get500" role="button" title="500 последних строк">500</a></li>
-                <li title="Здесь будет кнопка для скачивания всего файла"><a href="#" class="btn disabled" role="button">Download</a></li>
+                <li><a href="download" class="disabled" role="button" title="Скачать весь файл">Download</a></li>
             </ul>
             <ul class="nav navbar-nav" style="float:right">
-                <li><a href="/" role="button" title="К списку логов">Selector</a></li>
+                <li><a href="${pageContext.request.contextPath}" role="button" title="К списку логов">Selector</a></li>
             </ul>
         </div>
     </div>
