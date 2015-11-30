@@ -7,6 +7,7 @@ import ru.bug4j.weblog.WeblogException;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class LogFile {
             }
 
             String lastLine = sb.reverse().toString();
-            return lastLine;
+            return String.valueOf(Charset.forName("UTF-8").encode(lastLine));
         } catch( java.io.FileNotFoundException e ) {
             e.printStackTrace();
             return null;
